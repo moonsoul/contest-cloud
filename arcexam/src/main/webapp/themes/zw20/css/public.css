@@ -1,0 +1,30 @@
+@charset "utf-8";
+/* CSS reset */
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,select,option,textarea,p,blockquote,th,td,table,tr,td{padding: 0; margin: 0;}
+body {font-family:"微软雅黑"; font-size:14px; color:#555}
+fieldset,img {border: 0;} 
+ul,li{list-style:none;}
+h1,h2,h3,h4,h5,h6{font-weight: normal; font-size: 100%;}
+body{background:url(../images/bg_01.jpg) no-repeat; background-attachment:fixed;}
+.clear{clear:both;}
+a{text-decoration:none; color:#555}
+a:hover{text-decoration:none;}
+.clear{clear:both;}
+::-webkit-input-placeholder { color:#fff;}
+:-moz-placeholder {color:#fff; opacity:  1;}
+::-moz-placeholder {color:#fff; opacity:  1;}
+:-ms-input-placeholder{color:#fff;}
+.green{color:#5ec92e}
+.red{color:#f00}
+.martop20{margin-top:20px}
+.r{float:right}
+.l{float:left}
+
+#logo{width:1180px; height:100px; margin:0 auto 85px;}
+#logo h1 a{display:block; width:390px; height:100px; margin:20px auto; background:url(../images/logo.png) no-repeat; text-indent:-99999px;}
+.main{width:1180px; margin:0 auto;}
+
+.footer_white{width:100%; height:30px; background:none; margin-bottom:55px;}
+.footer{height:40px; margin-top:30px; padding:13px 0 0;  background:url(../images/footer_bg.jpg) no-repeat center top #00A7FF; text-align:center; color:#fff; line-height:25px; position:fixed; bottom:0; width:100%;z-index:10000000}
+.footer a{color:#fff;}
+.footer a:hover{color:#B7FF97;}
