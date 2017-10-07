@@ -165,20 +165,20 @@ function addListener(element,e,fn){
 	}
 </script>
 
-<logic:messagesPresent message="true">
-	<div class="message">
-		<html:messages id="message" message="true">
-			<script type="text/javascript">
-						layer.msg('<c:out value="${message}"/>', {
-							icon: 0,
-							time: 3000, //2秒关闭（如果不配置，默认是3秒）
-							offset: ['280px', '980px']
-						}, function(){
-							//do something
-						});
-						//$("#username").focus();
-		    </script>
-		</html:messages>
-	</div>
-</logic:messagesPresent>
+<div class="message">
+	<script type="text/javascript">
+		var s = ('${message}' != null && '${message}' != '')?'${message}':(('${param.message}' != null && '${param.message}' != '')?decodeURI(decodeURI('${param.message}')):'');
+		if (s != null && s != '') {
+			layer.msg(s, {
+				icon: 0,
+				time: 3000, //2秒关闭（如果不配置，默认是3秒）
+				offset: ['280px', '980px']
+			}, function () {
+				//do something
+			});
+		}
+		//$("#username").focus();
+	</script>
+</div>
+
 </html>

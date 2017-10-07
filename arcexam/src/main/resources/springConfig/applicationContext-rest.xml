@@ -66,8 +66,7 @@
 				<bean class="org.springframework.http.converter.ResourceHttpMessageConverter"/>
 				<bean class="org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter"/>
 				<bean class="org.springframework.http.converter.FormHttpMessageConverter"/>
-
-
+				<bean class="org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter"/>
 			</list>
 		</property>
 		<property name="requestFactory">

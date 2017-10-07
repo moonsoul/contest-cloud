@@ -24,16 +24,15 @@ import java.io.IOException;
 })
 public class SystemSecurityFilter implements Filter {
 
-	private String	keys				= null;
+	private String keys = null;
 
-	private String	loginNeedPaths[]	= null;		// 需要登录的路径
+	private String loginNeedPaths[] = null;        // 需要登录的路径
 
-	private String	loginUnNeedPaths[]	= null;		// 得到不必登录的过滤配置路径
+	private String loginUnNeedPaths[] = null;        // 得到不必登录的过滤配置路径
 
 	private static RedisCacheService<Object> redisCacheService = null;
 
-	public void destroy()
-	{
+	public void destroy() {
 		this.keys = null;
 		this.loginNeedPaths = null;
 		this.loginUnNeedPaths = null;
@@ -41,8 +40,7 @@ public class SystemSecurityFilter implements Filter {
 
 
 	public void doFilter(ServletRequest arg0, ServletResponse arg1,
-			FilterChain filterChain) throws IOException, ServletException
-	{
+						 FilterChain filterChain) throws IOException, ServletException {
 		if(redisCacheService == null){
 			redisCacheService = (RedisCacheService<Object>) SpringUtil.getBean("redisCacheService");
 		}
@@ -74,16 +72,16 @@ public class SystemSecurityFilter implements Filter {
 				String token = null;
 				String authkey = null;
 				Cookie[] cookies = request.getCookies();//这样便可以获取一个cookie数组
-				for(Cookie cookie : cookies){
+				for (Cookie cookie : cookies) {
 					String key = cookie.getName();// get the cookie name
-					if(StringUtils.equalsIgnoreCase("token", key)) {
+					if (StringUtils.equalsIgnoreCase("token", key)) {
 						token = cookie.getValue(); // get the cookie value
-					}else if(StringUtils.equalsIgnoreCase("authkey", key)) {
+					} else if (StringUtils.equalsIgnoreCase("authkey", key)) {
 						authkey = cookie.getValue(); // get the cookie value
 					}
 				}
 
-				if(StringUtils.isEmpty(authkey) || StringUtils.isEmpty(token)){
+				if (StringUtils.isEmpty(authkey) || StringUtils.isEmpty(token)) {
 					RequestDispatcher rd = request.getSession().getServletContext().getRequestDispatcher(ContainsKeys.STU_LOGIN_URL);
 					saveError(request, "请登陆！");
 
@@ -93,10 +91,10 @@ public class SystemSecurityFilter implements Filter {
 					return;
 				}
 
-				String ctx=request.getContextPath();
-				String path=requesturl.split(ctx)[1];
+				String ctx = request.getContextPath();
+				String path = requesturl.split(ctx)[1];
 				token = JWTHelper.unsign(token, String.class);
-				if(StringUtils.isEmpty(token)) {
+				if (StringUtils.isEmpty(token)) {
 					RequestDispatcher rd = request.getSession().getServletContext().getRequestDispatcher(ContainsKeys.STU_LOGIN_URL);
 					saveError(request, "请重新登陆！");
 
@@ -107,9 +105,14 @@ public class SystemSecurityFilter implements Filter {
 				}
 				String vals[] = token.split("_");
 
-				String authkeyredis = redisCacheService.getRawCacheMapValue("authkey", vals[0]).toString();
-				if(!StringUtils.equalsIgnoreCase(authkeyredis, authkey)){
-					RequestDispatcher rd = request.getSession().getServletContext().getRequestDispatcher(ContainsKeys.STU_LOGIN_URL);
+				//此处只从缓存中获取authkey，不查询数据库
+				Object obj = redisCacheService.getRawCacheMapValue("authkey", vals[0]);
+				String authkeyredis = null;
+				if (null != obj) {
+					authkeyredis = obj.toString();
+				}
+				if (StringUtils.isEmpty(authkeyredis) || StringUtils.isEmpty(authkey) || !StringUtils.equalsIgnoreCase(authkeyredis, authkey)) {
+					RequestDispatcher rd = request.getSession().getServletContext().getRequestDispatcher(StringUtils.equals("0", vals[1])?ContainsKeys.STU_LOGIN_URL:ContainsKeys.ADMIN_LOGIN_URL);
 					saveError(request, "请重新登陆！");
 
 					clearAuthAndTokenCookies(response);
@@ -118,10 +121,10 @@ public class SystemSecurityFilter implements Filter {
 					return;
 				}
 
-				Long userType=Long.parseLong(vals[1]);
-				if (userType != null){
-					if(!checkpath(path, userType.longValue())){
-						RequestDispatcher rd = request.getSession().getServletContext().getRequestDispatcher(ContainsKeys.STU_LOGIN_URL);
+				Long userType = Long.parseLong(vals[1]);
+				if (userType != null) {
+					if (!checkpath(path, userType.longValue())) {
+						RequestDispatcher rd = request.getSession().getServletContext().getRequestDispatcher(StringUtils.equals("0", vals[1])?ContainsKeys.STU_LOGIN_URL:ContainsKeys.ADMIN_LOGIN_URL);
 						saveError(request, "当前用户无此权限，请重新登陆！");
 
 						clearAuthAndTokenCookies(response);
@@ -129,8 +132,8 @@ public class SystemSecurityFilter implements Filter {
 						rd.forward(request, response);
 						return;
 					}
-				}else{
-					RequestDispatcher rd = request.getSession().getServletContext().getRequestDispatcher(ContainsKeys.STU_LOGIN_URL);
+				} else {
+					RequestDispatcher rd = request.getSession().getServletContext().getRequestDispatcher(StringUtils.equals("0", vals[1])?ContainsKeys.STU_LOGIN_URL:ContainsKeys.ADMIN_LOGIN_URL);
 					saveError(request, "当前用户无此权限，请重新登陆！");
 
 					clearAuthAndTokenCookies(response);
@@ -138,7 +141,7 @@ public class SystemSecurityFilter implements Filter {
 					rd.forward(request, response);
 					return;
 				}
-				
+
 				/*后续完善
 				// 禁止包含sql注入的查询 add by zhaoyuyang 2010.10.29
 				Enumeration e = request.getParameterNames();
@@ -165,43 +168,49 @@ public class SystemSecurityFilter implements Filter {
 					}
 				}*/
 
+				request.setAttribute("userid", vals[0]);
+				request.setAttribute("usercode", vals[2]);
 				filterChain.doFilter(request, response);
 
-				authkeyredis = redisCacheService.getRawCacheMapValue("authkey", vals[0]).toString();
-				setAuthAndTokenCookies(response, vals[0], vals[1], authkeyredis);
-			}else {
+				Object obj_ = redisCacheService.getRawCacheMapValue("authkey", vals[0]);
+				if(null != obj_) {
+					authkeyredis = obj_.toString();
+					setAuthAndTokenCookies(response, vals[0], vals[1], authkeyredis);
+				}
+			} else {
 				filterChain.doFilter(request, response);
 			}
 
 		}
 
 	}
-		private boolean checkpath(String path, Long usertype){
-			boolean t=false;
-			if(usertype == 0l){//考生
-			for(String p:ContainsKeys.stupath){
-				if(path.startsWith(p)){
-					t=true;
+
+	private boolean checkpath(String path, Long usertype) {
+		boolean t = false;
+		if (usertype == 0l) {//考生
+			for (String p : ContainsKeys.stupath) {
+				if (path.startsWith(p)) {
+					t = true;
 				}
 			}
-			}else if(usertype == 1l){//管理员
-				for(String p:ContainsKeys.adminpath){
-					if(path.startsWith(p)){
-						t=true;
-					}
-			}
-			}else if(usertype == 2l){//监控
-				for(String p:ContainsKeys.monitorpath){
-					if(path.startsWith(p)){
-						t=true;
-					}
+		} else if (usertype == 1l) {//监控
+			for (String p : ContainsKeys.monitorpath) {
+				if (path.startsWith(p)) {
+					t = true;
 				}
 			}
-			
-			return t;
+		} else if (usertype == 2l) {//管理员
+			for (String p : ContainsKeys.adminpath) {
+				if (path.startsWith(p)) {
+					t = true;
+				}
+			}
 		}
-	public void init(FilterConfig filterConfig) throws ServletException
-	{
+
+		return t;
+	}
+
+	public void init(FilterConfig filterConfig) throws ServletException {
 		this.keys = filterConfig.getInitParameter("sqlkeys");
 
 		// 需要验证是否登录的路径，必须配置
@@ -217,34 +226,33 @@ public class SystemSecurityFilter implements Filter {
 		}
 	}
 
-	protected void saveError(HttpServletRequest request, String message)
-	{
+	protected void saveError(HttpServletRequest request, String message) {
 		if (StringUtils.isEmpty(message)) {
 			return;
 		}
-		request.setAttribute("ERROR", message);
+		request.setAttribute("message", message);
 	}
 
-	private void clearAuthAndTokenCookies(HttpServletResponse response){
-		Cookie cookie = new Cookie("authkey",null);
+	private void clearAuthAndTokenCookies(HttpServletResponse response) {
+		Cookie cookie = new Cookie("authkey", null);
 		cookie.setMaxAge(0);
 		cookie.setPath("/");
 		response.addCookie(cookie);
-		cookie = new Cookie("token",null);
+		cookie = new Cookie("token", null);
 		cookie.setMaxAge(0);
 		cookie.setPath("/");
 		response.addCookie(cookie);
 	}
 
-	private void setAuthAndTokenCookies(HttpServletResponse response, String userid, String usertype, String authkey){
-		String token = JWTHelper.sign(userid + "_" + usertype, 60L * 1000L * 60L);
+	private void setAuthAndTokenCookies(HttpServletResponse response, String userid, String usertype, String authkey) {
+		String token = JWTHelper.sign(userid + "_" + usertype, 60L * 1000L * ContainsKeys.EXPIRE_TIME);
 		//封装成对象返回给客户端
-		Cookie cookie = new Cookie("authkey",authkey);
+		Cookie cookie = new Cookie("authkey", authkey);
 		//cookie.setMaxAge(3600);
 		cookie.setPath("/");
 		response.addCookie(cookie);
 
-		cookie = new Cookie("token",token);
+		cookie = new Cookie("token", token);
 		//cookie.setMaxAge(3600);
 		cookie.setPath("/");
 		response.addCookie(cookie);

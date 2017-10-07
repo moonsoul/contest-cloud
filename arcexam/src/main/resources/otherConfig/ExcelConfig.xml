@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans>
+
+	<bean id="user" class="com.app.dto.UserImportDTO" startRowNum="1" endColumnNum="7">
+		<property name="usercode" titleName="学号（用户名）" dataType="String" maxLength="30" required="true" defaultValue="" format=""/>
+		<property name="username" titleName="学生姓名" dataType="String" maxLength="25" required="true"  defaultValue="" format=""/>
+		<property name="groupcode" titleName="班级编号" dataType="String" maxLength="10" required="true"  defaultValue="" format=""/>
+		<property name="speciality" titleName="专业" dataType="String" maxLength="30" required="true"  defaultValue="" format=""/>
+		<property name="sex" titleName="性别" dataType="String" maxLength="6" required="true"  defaultValue="" format=""/>
+		<property name="boarddate" titleName="入学时间" dataType="String" maxLength="10" required="true"  defaultValue="" format=""/>
+		<property name="usertype" titleName="所属角色" dataType="int" maxLength="1" required="true"  defaultValue="0" format=""/>
+	</bean>
+
+	<bean id="question" class="com.chinasage.app.excelbean.exam.TestImportDTO" startRowNum="1" endColumnNum="11">
+		<property name="testtype" titleName="题型" dataType="String" maxLength="30" required="true" defaultValue="" format=""/>
+		<property name="optionsanswer" titleName="选项" dataType="String" maxLength="3000" required="false"  defaultValue="" format=""/>
+		<property name="score" titleName="试题分数" dataType="Double" maxLength="4" required="true"  defaultValue="" format=""/>
+		<property name="questionscategory" titleName="试题库编号" dataType="String" maxLength="30" required="true"  defaultValue="" format=""/>
+		<property name="usetype" titleName="使用性质" dataType="String" maxLength="20" required="true"  defaultValue="" format=""/>
+		<property name="difficulty" titleName="难度" dataType="String" maxLength="10" required="true"  defaultValue="" format=""/>
+		<property name="questioncontent" titleName="题干" dataType="String" maxLength="3000" required="true" defaultValue="" format=""/>
+		<property name="answer" titleName="答案" dataType="String" maxLength="3000" required="false"  defaultValue="" format=""/>
+		<property name="knowledgecontext" titleName="图纸名称" dataType="String" maxLength="3000" required="true"  defaultValue="" format=""/>
+		<property name="quesknowledge" titleName="知识链接" dataType="String" maxLength="30" required="false"  defaultValue="" format=""/>
+		<property name="remark" titleName="备注" dataType="String" maxLength="500" required="false"  defaultValue="" format=""/>
+	</bean>
+
+
+	<bean id="question" class="com.chinasage.app.excelbean.exam.TestImportDTO" startRowNum="1" endColumnNum="11">
+		<property name="gn" titleName="班级" dataType="String" maxLength="30" required="true" defaultValue="" format=""/>
+		<property name="uc" titleName="学号" dataType="String" maxLength="3000" required="false"  defaultValue="" format=""/>
+		<property name="un" titleName="姓名" dataType="Double" maxLength="4" required="true"  defaultValue="" format=""/>
+		<property name="bt" titleName="开始时间" dataType="String" maxLength="30" required="true"  defaultValue="" format=""/>
+		<property name="et" titleName="结束时间" dataType="String" maxLength="20" required="true"  defaultValue="" format=""/>
+		<property name="dc" titleName="答对题数" dataType="String" maxLength="10" required="true"  defaultValue="" format=""/>
+		<property name="cc" titleName="答错题数" dataType="String" maxLength="3000" required="true" defaultValue="" format=""/>
+		<property name="sc" titleName="未答题数" dataType="String" maxLength="3000" required="false"  defaultValue="" format=""/>
+		<property name="fm" titleName="分数" dataType="String" maxLength="3000" required="true"  defaultValue="" format=""/>
+	</bean>
+
+
+	<bean id="zhquestion" class="com.chinasage.app.excelbean.exam.TestImportDTO" startRowNum="1" endColumnNum="11">
+		<property name="testtype" titleName="题型" dataType="String" maxLength="30" required="true" defaultValue="" format=""/>
+		<property name="optionsanswer" titleName="选项" dataType="String" maxLength="3000" required="false"  defaultValue="" format=""/>
+		<property name="score" titleName="试题分数" dataType="Double" maxLength="4" required="true"  defaultValue="" format=""/>
+
+		<property name="difficulty" titleName="难度" dataType="String" maxLength="10" required="true"  defaultValue="" format=""/>
+		<property name="questioncontent" titleName="题干" dataType="String" maxLength="3000" required="true" defaultValue="" format=""/>
+		<property name="answer" titleName="答案" dataType="String" maxLength="3000" required="false"  defaultValue="" format=""/>
+		<property name="remark" titleName="备注" dataType="String" maxLength="500" required="false"  defaultValue="" format=""/>
+		
+		<property name="optionacontent" titleName="选项A" dataType="String" maxLength="3000" required="false" defaultValue="" format=""/>
+		<property name="optionbcontent" titleName="选项B" dataType="String" maxLength="3000" required="false" defaultValue="" format=""/>
+		<property name="optionccontent" titleName="选项C" dataType="String" maxLength="3000" required="false" defaultValue="" format=""/>
+		<property name="optiondcontent" titleName="选项D" dataType="String" maxLength="3000" required="false" defaultValue="" format=""/>
+	</bean>
+</beans>

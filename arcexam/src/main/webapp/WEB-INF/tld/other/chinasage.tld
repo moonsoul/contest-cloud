@@ -627,7 +627,7 @@
  
  <tag>
   <name>tree</name>
-  <tagclass>com.chinasage.common.appweb.taglib.tree.TreeTag</tagclass>
+  <tagclass>com.chinasage.common.appweb.taglib.com.chinasage.common.appweb.taglib.tree.TreeTag</tagclass>
   <bodycontent>jsp</bodycontent>
   <attribute>
    <name>autoSelect</name>

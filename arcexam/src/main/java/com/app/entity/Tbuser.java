@@ -24,16 +24,6 @@ public class Tbuser extends Entity implements java.io.Serializable {
 	private Long sex;
 	private String idnumber;
 
-	public String getUsercode() {
-		return usercode;
-	}
-
-	public void setUsercode(String usercode) {
-		this.usercode = usercode;
-	}
-
-	private String usercode;
-
 	private String creatorid;
 	private String createtime;
 
@@ -44,7 +34,16 @@ public class Tbuser extends Entity implements java.io.Serializable {
 	private String sxmc;	//市县名称
 	private String bmxh;		//报名序号
 	private String authkey;
-	
+
+
+	private String usercode;
+	private String birthday;
+	private String position;
+	private Long deletestatus;
+	private String modifytime;
+	private Long status;
+	private String email;
+	private Long integration;
 	// 主键
 	protected String primaryKey = "userid";
 
@@ -67,7 +66,70 @@ public class Tbuser extends Entity implements java.io.Serializable {
 		this.userid = userid;
 	}
 
-	
+	public String getUsercode() {
+		return usercode;
+	}
+
+	public void setUsercode(String usercode) {
+		this.usercode = usercode;
+	}
+
+	public String getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(String birthday) {
+		this.birthday = birthday;
+	}
+
+	public String getPosition() {
+		return position;
+	}
+
+	public void setPosition(String position) {
+		this.position = position;
+	}
+
+	public Long getDeletestatus() {
+		return deletestatus;
+	}
+
+	public void setDeletestatus(Long deletestatus) {
+		this.deletestatus = deletestatus;
+	}
+
+	public String getModifytime() {
+		return modifytime;
+	}
+
+	public void setModifytime(String modifytime) {
+		this.modifytime = modifytime;
+	}
+
+	public Long getStatus() {
+		return status;
+	}
+
+	public void setStatus(Long status) {
+		this.status = status;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public Long getIntegration() {
+		return integration;
+	}
+
+	public void setIntegration(Long integration) {
+		this.integration = integration;
+	}
+
 	public String getCreatorid() {
 		return creatorid;
 	}
