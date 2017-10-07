@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<sql>
-	<monitorlog>
-		<queryMonitorlogByRoomid>
-		select * from tbmonitorlog where roomid=<param>roomid</param> order by logdate desc
-		</queryMonitorlogByRoomid>
-	</monitorlog>
-</sql>
