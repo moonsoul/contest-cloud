@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sql>
+	<examquestion>
+		
+		 <queryPaperFlashZipname>
+		select b.zipname from tbexamzhquestionscategory b where b.zhtqcid = 
+		(select c.zhtqcid from tbexamquestions c where c.questionid = (select d.questionid from tbexampaperquestion d where d.paperid = <param>paperid</param> limit 0,1))
+		</queryPaperFlashZipname>    
+		
+	</examquestion>
+</sql>

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sql>
+	<!-- 我的考试 -->
+	<myexam>
+	<getQuestionidByPaperid>
+		SELECT tep.paperid,epq.questionid,epq.quesequence,tq.questiontype, epq.score, ts.subjectsequence from tbexamandpaper tep,Tbexampaperquestion epq,tbexamquestion tq,tbexampapersubject ts  
+		where tep.paperid=epq.paperid AND epq.papersubjectid=ts.papersubjectid AND tq.questionid=epq.questionid  AND tep.paperid=<param>paperid</param> order by quesequence
+	</getQuestionidByPaperid>
+	<getOptionsAnswerByQuetionid>
+		select eoa.optionid,eoa.questionid,eoa.optionnum,eoa.isanswer from tbexamoptionandanswer eoa 
+		where eoa.questionid = <param>questionid</param>
+	</getOptionsAnswerByQuetionid>
+	<queryMyExam>
+		select tmp.*,tepr.examnum as teprexamnum,tepr.studentsubmit,tepr.teachersubmit,tepr.finalmark,tepr.rsltid,tepr.practicetime,tepr.opennum  
+			from  (select te.*,tur.userid,tur.registerstate,tur.reviewer,tur.veriewstatus,tur.reviewmark,tur.createtime as turcreatetime,tur.areatype,
+			tep.paperid from tbexamexam te,tbexamandpaper tep,tbexamuserregister tur 
+			     where te.examid = tur.examid and tep.examid = te.examid <conf>where</conf>) tmp 
+			     left join tbexampaperrslt tepr on tmp.userid = tepr.studentid 
+			     and tepr.examid = tmp.examid and tepr.paperid = tmp.paperid order by turcreatetime desc
+	</queryMyExam>
+	<queryMyExamInfo>
+     select tr.examid, tr.examnum , tr.studentsubmit, tr.teachersubmit , tr.finalmark from TBEXAMPAPERRSLT tr 
+     where studentid=<param>studentid</param>  and examid=<param>examid</param> and paperid=<param>paperid</param>   order by examnum desc
+	</queryMyExamInfo>
+		
+	<queryPaperByExam>
+	 select ee.*, ep.paperid from TBEXAMANDPAPER ep,Tbexamexam ee WHERE ep.examid = ee.examid and ee.examid=<param>examid</param>
+	 </queryPaperByExam>
+         
+         <!-- 单项识图 - 识图能力评价 - 模考分析报告 -->
+	<queryStuAbtExamDetail>
+SELECT
+	exam.rank,
+	exam.totalPeople,
+	exam.finalMark,
+	exam.useMinute,
+	exam.useSecond,
+	exam.useMinuteQues,
+	exam.useSecondQues,
+	stu.correctRate,stu.rightNum,(stu.totalNum-stu.rightNum) as errorNum 
+FROM
+	(
+		SELECT
+			a.rank,
+			(
+				SELECT
+					count(*)
+				FROM
+					tbexampaperrslt epr
+				WHERE
+					epr.EXAMID = <param>examid</param>
+			) totalPeople,
+			a.STUDENTID,
+			a.EXAMID,
+			a.PAPERID,
+			a.FINALMARK,
+			a.BEGINTIME,
+			a.ENDTIME,
+			a.totalSec,
+			floor(a.totalSec / 60) useMinute,
+
+		IF (a.totalSec > 60,(a.totalSec - (floor(a.totalSec / 60)) * 60),a.totalSec) useSecond,
+		floor(a.avgQuesTime / 60) useMinuteQues,
+		IF (a.avgQuesTime > 60,(a.avgQuesTime - (floor(a.avgQuesTime / 60)) * 60),a.avgQuesTime) useSecondQues
+	FROM
+		(
+			SELECT
+				c.*, d.totalQuesNum,
+				round((c.totalSec / d.totalQuesNum),0) avgQuesTime
+			FROM
+				(
+					SELECT
+						(
+						select count(1) + 1
+						from tbexampaperrslt r
+						where r.FINALMARK>epr.FINALMARK
+						and r.examid = <param>examid</param>
+						) rank,
+						epr.STUDENTID,
+						epr.EXAMID,
+						epr.PAPERID,
+						epr.FINALMARK,
+						epr.BEGINTIME,
+						epr.ENDTIME,
+						ROUND((UNIX_TIMESTAMP(epr.ENDTIME) - UNIX_TIMESTAMP(epr.BEGINTIME))) totalSec
+					FROM
+						tbexampaperrslt epr
+					WHERE
+						epr.examid = <param>examid</param>
+					ORDER BY
+						epr.FINALMARK DESC
+				) c
+			LEFT JOIN (
+				SELECT
+					epq.PAPERID,
+					COUNT(*) totalQuesNum
+				FROM
+					tbexampaperquestion epq
+				WHERE
+					epq.PAPERID = <param>paperid</param>
+			) d ON c.paperid = d.paperid
+		) a
+	) exam
+LEFT JOIN (
+	SELECT
+		r.EXAMID,
+		r.STUDENTID,
+		t.totalNum,
+		IFNULL(r.rightNum, 0) rightNum,
+		IFNULL(e.errorNum, 0) errorNum,
+		IFNULL((round((r.rightNum / t.totalNum * 100),2)),0) correctRate
+	FROM
+		(
+			SELECT
+				eap.EXAMID,
+				count(*) totalNum
+			FROM
+				tbexampaperquestion epq,
+				tbexamandpaper eap
+			WHERE
+				epq.PAPERID = eap.PAPERID
+			AND eap.EXAMID = <param>examid</param>
+		) t
+	LEFT JOIN (
+		SELECT
+			epa.EXAMID,
+			epa.STUDENTID,
+			count(*) rightNum
+		FROM
+			tbexampaperanswer epa
+		WHERE
+			1 = 1
+		AND epa.EXAMID = <param>examid</param>
+		AND epa.STUDENTID = <param>userid</param>
+		AND epa.MARK > 0
+	) r ON r.EXAMID = t.EXAMID
+	LEFT JOIN (
+		SELECT
+			epa.EXAMID,
+			epa.STUDENTID,
+			count(*) errorNum
+		FROM
+			tbexampaperanswer epa
+		WHERE
+			1 = 1
+		AND epa.EXAMID = <param>examid</param>
+		AND epa.STUDENTID = <param>userid</param> 
+		AND epa.MARK = 0
+	) e ON e.EXAMID = r.EXAMID
+) stu ON exam.examid = stu.examid
+AND exam.STUDENTID = stu.STUDENTID
+WHERE
+	exam.STUDENTID = <param>userid</param>
+	</queryStuAbtExamDetail>
+	
+	<clearQuestionAnswerByPaperid>
+		update tbexamoptionandanswer set isanswer=0 where questionid in (select questionid from tbexampaperquestion where paperid=<param>paperid</param>)
+	</clearQuestionAnswerByPaperid>
+	
+	<updateQuestionAnswerByQuestionidAndOptionnum>
+		update tbexamoptionandanswer set isanswer=1 where questionid=<param>questionid</param> and optionnum=<param>optionnum</param>
+	</updateQuestionAnswerByQuestionidAndOptionnum>
+	</myexam>
+	
+	
+	<studentExam>
+	<!-- 根据examid paperid userid examnum 查询考试记录-->
+		<queryExamRSTLByExamUser>
+		select * from TBEXAMPAPERRSLT er 
+		where 		er.studentid =<param>studentid</param> 
+				and er.examid=<param>examid</param> 
+				and er.paperid=<param>paperid</param> 
+				and er.examnum=<param>examnum</param>
+		</queryExamRSTLByExamUser>
+	
+		<queryTbexampaperanswerByRsltid>
+		select * from TBEXAMPAPERANSWER es where es.rsltid =<param>rsltid</param>
+		</queryTbexampaperanswerByRsltid>
+	
+		<queryTbexampaperanswerByUseridAndExamid>
+		select * from TBEXAMPAPERANSWER es where es.userid =<param>userid</param> and examid=<param>examid</param>
+		</queryTbexampaperanswerByUseridAndExamid>
+	</studentExam>
+	
+	<exammanage>
+		<queryExamTime><!-- 查询考试起止时间 -->
+			SELECT tbe.begintime,tbe.endtime FROM tbexamexam tbe WHERE tbe.examid =<param>examid</param>
+		</queryExamTime>
+	</exammanage>
+</sql>	

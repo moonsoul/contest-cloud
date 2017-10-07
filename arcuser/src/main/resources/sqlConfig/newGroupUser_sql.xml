@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sql>
+	<usermanage>
+		<getAdminAllInfoByInput>
+			SELECT tu.* FROM tbuser tu 
+			WHERE tu.username=<param>username</param> and tu.usertype=1
+		</getAdminAllInfoByInput>
+
+		<getExamStudentAllInfoByInput>
+			SELECT tu.*,tes.*, tbr.roomno FROM tbexamstudent tes,tbuser tu, tbexamroom tbr 
+			WHERE tu.userid= tes.userid and tes.roomid=tbr.roomid and tu.ticketnum=<param>ticketnum</param> and tes.examid=<param>examid</param>
+		</getExamStudentAllInfoByInput>
+		
+		<getMonitorAllInfoByInput>
+			SELECT tbm.monitorid, tbm.name as username, tbm.password, tbm.examid, tbm.roomid, tbr.roomno FROM tbmonitor tbm, tbexamroom tbr 
+			WHERE tbr.roomid=tbm.roomid and tbm.name=<param>username</param> and tbm.examid=<param>examid</param>
+		</getMonitorAllInfoByInput>
+		<!-- 重置密码 -->
+		<resetpassword>
+		   UPDATE tbuser SET password=<param>password</param> 	WHERE userid=<param>userid</param>
+		</resetpassword>
+
+
+		<pagedQuery>
+			SELECT tu.userid, tu.usercode, tu.username, tu.deletestatus, tu.status ,tu.usertype,tu.integration,
+			GROUP_CONCAT(tg.groupname SEPARATOR '、') groupname, GROUP_CONCAT(tg.groupid SEPARATOR '、') groupid FROM tbuser tu left join
+			tbusergroup tug on tu.userid=tug.userid left join tbgroup tg on tg.groupid=tug.groupid WHERE 1=1 <conf>wheresql</conf> group by
+			tu.userid <conf>wheresql_1</conf>
+		</pagedQuery>
+
+		<insertuserattach>
+			INSERT INTO TBUSERATTACH(userid,nation,graduate,education,speciality,degree,polity,phone,credentialstype,credentialscode,address,postalcode,boarddate,remark) VALUES(<param>userid</param>,<param>nation</param>,<param>graduate</param>,<param>education</param>,<param>speciality</param>,<param>degree</param>,<param>polity</param>,<param>phone</param>,<param>credentialstype</param>,<param>credentialscode</param>,<param>address</param>,<param>postalcode</param>,<param>boarddate</param>,<param>remark</param>)
+		</insertuserattach>
+		<insertuser>
+			INSERT INTO TBUSER(userid,usercode,username,usertype,password,photo,companyid,groupid,sex,birthday,position,deletestatus,creatorid,createtime,status,email) VALUES(<param>userid</param>,<param>usercode</param>,<param>username</param>,<param>usertype</param>,<param>password</param>,<param>photo</param>,<param>companyid</param>,<param>groupid</param>,<param>sex</param>,<param>birthday</param>,<param>position</param>,<param>deletestatus</param>,<param>creatorid</param>,<param>createtime</param>,<param>status</param>,<param>email</param>)
+		</insertuser>
+
+		<isDisplayByUserCode>
+			SELECT count(tu.userid) as num FROM tbuser tu WHERE tu.deletestatus = 1 and tu.usercode=<param>usercode</param>
+		</isDisplayByUserCode>
+
+		<updateuser>
+			UPDATE TBUSER SET
+			username=<param>username</param>,
+			sex=<param>sex</param>,
+			companyid=<param>companyid</param>,
+			groupid=<param>groupid</param>,
+			birthday=<param>birthday</param>,
+			position=<param>position</param>,
+			modifytime=<param>modifytime</param>,
+			email=<param>email</param>,
+			usertype=<param>usertype</param>
+			<conf>passwordsql</conf>
+			<conf>photosql</conf>
+			WHERE   userid=<param>userid</param>
+		</updateuser>
+		<updateuserattach>
+			UPDATE TBUSERATTACH SET
+			nation=<param>nation</param>,
+			graduate=<param>graduate</param>,
+			education=<param>education</param>,
+			speciality=<param>speciality</param>,
+			degree=<param>degree</param>,
+			polity=<param>polity</param>,
+			phone=<param>phone</param>,
+			credentialstype=<param>credentialstype</param>,
+			credentialscode=<param>credentialscode</param>,
+			address=<param>address</param>,
+			postalcode=<param>postalcode</param>,
+			boarddate=<param>boarddate</param>,
+			remark=<param>remark</param>
+			WHERE userid=<param>userid</param>
+		</updateuserattach>
+
+		<getUserInfoById>
+			SELECT tu.userid,tu.integration, tu.usercode, tu.username, tu.sex, tu.birthday, tu.photo, tu.position,tu.email,  tu.status,tu.groupid,tu.usertype FROM tbuser tu WHERE tu.userid=<param>userid</param>
+		</getUserInfoById>
+
+		<updateUserIntegration>
+			update tbuser set integration=<param>integration</param> where userid = <param>userid</param>
+		</updateUserIntegration>
+
+		<changeUserStatus>
+			UPDATE tbuser SET status=<param>status</param> 	WHERE userid=<param>userid</param>
+		</changeUserStatus>
+
+		<getUserInfoByIdForDisplay>
+			SELECT tu.userid, tu.usercode, tu.username, tu.createtime, tu.photo,(SELECT tbgc.groupname FROM tbgroup tbgc WHERE tbgc.groupid=tu.companyid) as companyname,(SELECT tbgg.groupname FROM tbgroup tbgg WHERE tbgg.groupid=tu.groupid) as groupname, tu.groupid, tu.companyid, tu.sex, tu.birthday, tu.position, tu.status, tu.email, tu.usertype FROM tbuser tu   WHERE tu.userid=<param>userid</param>
+		</getUserInfoByIdForDisplay>
+
+
+		<getUserListPaiMing>
+			select tt.userid,tt.usercode,tt.username,tt.integration,tg.groupname,tg.groupid,tt.photo,(select count(1)+1 from (select userid,sum(integration) integration from tbuser group by userid) a where a.integration>tt.integration ) as rank
+			from (select tu.userid,tu.usercode,tu.username,sum(tu.integration) integration,tu.groupid,tu.usertype,tu.PHOTO from tbuser tu group by userid) tt,tbgroup tg
+			WHERE tt.groupid = tg.groupid and tt.usertype=0 <conf>groupsql</conf> group by tt.userid order by rank
+		</getUserListPaiMing>
+		<getUserListPaiMingByNianJi>
+			select tt.userid,tt.usercode,tt.username,tt.integration,tg.groupname,tg.groupid,tt.photo,
+			(select count(1)+1 from (select userid,sum(integration) integration from tbuser where companyid=<param>companyid</param> group by userid) a where a.integration>tt.integration ) as rank
+			from (select tu.userid,tu.usercode,tu.username,sum(tu.integration) integration,tu.groupid,tu.usertype,tu.PHOTO,tu.companyid from tbuser tu  group by userid) tt,tbgroup tg
+			WHERE tt.groupid = tg.groupid and tt.usertype=0 and tt.companyid=<param>companyid</param> <conf>groupsql</conf> group by tt.userid order by rank
+		</getUserListPaiMingByNianJi>
+		<getUserListPaiMingByBanJi>
+			select tt.userid,tt.usercode,tt.username,tt.integration,tg.groupname,tg.groupid,tt.photo,
+			(select count(1)+1 from (select userid,sum(integration) integration from tbuser where groupid=<param>groupid</param> group by userid) a where a.integration>tt.integration ) as rank
+			from (select tu.userid,tu.usercode,tu.username,sum(tu.integration) integration,tu.groupid,tu.usertype,tu.PHOTO from tbuser tu
+			group by userid) tt,tbgroup tg
+			WHERE tt.groupid = tg.groupid and tt.usertype=0 and tt.groupid=<param>groupid</param> <conf>groupsql</conf> group by tt.userid order by rank
+		</getUserListPaiMingByBanJi>
+
+		<getUserPaiMingByID>
+			select COUNT(1)+1 from tbuser where integration>(select integration from tbuser where userid=<param>userid</param>)
+		</getUserPaiMingByID>
+
+		<!-- ///////-->
+		<getUserInfoByUsercode>
+			SELECT tu.* FROM tbuser tu WHERE tu.usercode=<param>usercode</param>
+		</getUserInfoByUsercode>
+
+		<getUserInfoByUserid>
+			SELECT tu.* FROM tbuser tu WHERE tu.userid=<param>userid</param>
+		</getUserInfoByUserid>
+	</usermanage>
+
+	<groupmanage>
+		<queryAllgroup>
+			SELECT t.* FROM tbgroup t <conf>where</conf>
+		</queryAllgroup>
+		<queryZTreeList>
+			select tm.groupid as id,tm.parentid AS pId,tm.groupname AS name from tbgroup tm <conf>where</conf>
+		</queryZTreeList>
+		<queryZTreeList2LastNodeIsHidden>
+			select tm.groupid as id,tm.parentid AS pId,tm.groupname AS name,if(tm.type=2,'true','false') AS isHidden from tbgroup tm <conf>where</conf>
+		</queryZTreeList2LastNodeIsHidden>
+		<checkGroupUsed>
+			SELECT tu.userid FROM tbuser tu WHERE tu.groupid=<param>groupid</param>
+		</checkGroupUsed>
+		<checkGroupType>
+			SELECT tg.type FROM tbgroup tg WHERE tg.groupid=<param>groupid</param> AND tg.type=2
+		</checkGroupType>
+		<checkGroupHasChild>
+			SELECT tg.groupid FROM tbgroup tg WHERE tg.parentid=<param>groupid</param> AND tg.deletestatus=1
+		</checkGroupHasChild>
+		<checkGroupCodeSole>
+			SELECT tg.groupid FROM tbgroup tg WHERE tg.groupcode=<param>groupcode</param>
+		</checkGroupCodeSole>
+		<deletegroupbyid>
+			UPDATE tbgroup SET deletestatus=0 WHERE groupid=<param>groupid</param>
+		</deletegroupbyid>
+		<getGroupInfoByIdForDisplay>
+			SELECT tg.groupid,
+			tg.groupcode,
+			tg.groupname,
+			tg.parentid,
+			tg.type,
+			tg.location,
+			tg.address,
+			tg.postalcode,
+			tg.phone,
+			tg.fax,
+			tg.email,
+			tg.linkman,
+			tg.remark,
+			(select count(tg0.groupid) from tbgroup tg0 where tg0.parentid = tg.groupid) as childnum
+			FROM tbgroup tg
+			WHERE tg.groupid = <param>groupid</param>
+		</getGroupInfoByIdForDisplay>
+		<getGroupChildrenNode>
+			SELECT tgt.groupid,tgt.groupname,tgt.parentid,tgt.location,tgt.childnum  FROM (SELECT tg.groupid, tg.groupname, tg.parentid, tg.location, count(tg0.groupid) AS childnum FROM tbgroup tg left join tbgroup tg0 on tg0.parentid = tg.groupid AND tg0.deletestatus=1 WHERE tg.parentid = <param>parentid</param> AND tg.deletestatus=1  GROUP BY tg.groupid,tg.groupname,tg.parentid,tg.location) tgt ORDER by tgt.location ASC
+		</getGroupChildrenNode>
+		<!-- add by zhaoyuyang 2010.10.19 -->
+		<getGroupByGroupCode>
+			SELECT tg.groupid,tg.groupcode,tg.groupname,tg.parentid FROM tbgroup tg WHERE tg.groupcode=<param>groupcode</param>
+		</getGroupByGroupCode>
+		<getNextLocationByParentId>
+			SELECT location FROM tbgroup WHERE parentid=<param>parentid</param> ORDER BY location DESC
+		</getNextLocationByParentId>
+		<getParentIdByParentCode>
+			SELECT groupid FROM tbgroup WHERE groupcode=<param>groupcode</param>
+		</getParentIdByParentCode>
+		<changeGroupLocation>
+			update TBGroup set
+			location = case
+			when groupid = <param>selfID</param> then <param>targetIndex</param>
+			when parentid = <param>parentID</param>
+			and location &lt;= <param>targetIndex</param>
+			and location > <param>selfIndex</param>
+			then location - 1
+			when parentid = <param>parentID</param>
+			and location >= <param>targetIndex</param>
+			and location &lt; <param>selfIndex</param>
+			then location + 1
+			else location end
+		</changeGroupLocation>
+	</groupmanage>
+
+	<usergroupmanage>
+		<checkUserGroupExisted>
+			SELECT tu.ugid FROM tbusergroup tu WHERE tu.groupid=<param>groupid</param> and tu.userid=<param>userid</param>
+		</checkUserGroupExisted>
+
+		<deleteUserGroupByConf>
+			delete from tbusergroup where 1=1 <conf>where</conf>
+		</deleteUserGroupByConf>
+
+		<getUserGroupInfoByConf>
+			select *  from tbusergroup where 1=1 <conf>where</conf>
+		</getUserGroupInfoByConf>
+
+		<getGroupInfoByUserid>
+			select * from tbgroup where groupid in (select groupid from tbusergroup where userid=<param>userid</param>)
+		</getGroupInfoByUserid>
+	</usergroupmanage>
+</sql>

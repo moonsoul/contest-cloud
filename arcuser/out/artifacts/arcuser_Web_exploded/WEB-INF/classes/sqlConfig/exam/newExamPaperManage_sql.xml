@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sql>
+
+	<exampapermanage>
+		
+		<!-- 根据试卷ID获得大题的相关信息,包括大题的总分数\大题下有几道小题 -->
+		<getSubjectAndTotalScoreAndQuestionNumByPaperid>
+		 	SELECT eps.papersubjectid,
+			  eps.paperid,
+			  eps.psname,
+			  eps.subjectsequence,
+			  SUM(epq.score)             AS totalscore,
+			  COUNT(epq.paperquestionid) AS questionnum
+			FROM Tbexampapersubject eps
+			LEFT JOIN Tbexampaperquestion epq
+			ON epq.papersubjectid = eps.papersubjectid
+			AND eps.paperid       = epq.paperid
+			WHERE eps.paperid = <param>paperid</param> 
+			GROUP BY eps.papersubjectid,
+			  eps.paperid,
+			  eps.psname,
+			  eps.subjectsequence
+			ORDER BY eps.subjectsequence
+		</getSubjectAndTotalScoreAndQuestionNumByPaperid>
+		<!-- 根据试卷ID获得试卷大题下试题相关信息,并且根据试题顺序排序,modify Henry 试卷手动选题和教师管理都使用该sql编辑试卷没有详细答题记录改为左外关联 -->
+		<getQuestionByPaperidAndPapersubjectid>
+				SELECT epq.paperquestionid,
+					  epq.paperid,
+					  epq.papersubjectid,
+					  epq.questionid,
+					  epq.score,
+					  epq.quesequence,
+					  tq.questioncontent,
+					  tq.questiontype,
+					  eps.psname,
+					  eps.subjectsequence
+					FROM Tbexampapersubject eps,
+					  tbexampaperquestion epq,
+					  tbexamquestion tq
+					WHERE eps.paperid          = epq.paperid 
+					AND eps.papersubjectid = epq.papersubjectid 
+					AND tq.questionid        = epq.questionid 
+					AND eps.paperid      = <param>paperid</param>
+					AND eps.papersubjectid = <param>papersubjectid</param> order by quesequence
+		</getQuestionByPaperidAndPapersubjectid>
+		
+		
+		<!-- 根据试卷ID获得试题选项单选\多选\填空的相关信息 -->
+		<getQuestionOptionsAnswerByPaperidAndQuestionid>
+			SELECT DISTINCT eq.questionid,
+			  eoa.optionnum,
+			  eoa.optiontext,
+			  eoa.isanswer,
+			  eoa.optionid
+			FROM tbexampaperquestion epq,
+			  tbexamquestion eq,
+			  tbexamoptionandanswer eoa
+			WHERE epq.paperid  = <param>paperid</param>
+			AND eq.questionid = <param>questionid</param>
+			AND epq.questionid = eq.questionid
+			AND eq.questionid  = eoa.questionid 
+			ORDER BY eq.questionid,eoa.optionnum 
+		</getQuestionOptionsAnswerByPaperidAndQuestionid>
+		
+		<queryPaperByPaperid><!-- 查询试卷信息add by Henry 2011-02-24 -->
+			 SELECT tbep.* FROM TBEXAMPAPER tbep WHERE paperid = <param>paperid</param>
+		</queryPaperByPaperid>
+		
+	
+	<getQuestionflashnameByMexam>
+		      SELECT eq.uniquename 
+      		FROM 
+        		tbexamquestionflash eq 
+        	where
+     			eq.questionid = <param>questionid</param>
+      </getQuestionflashnameByMexam> 
+      
+      <getSubjectByPaperid>
+		 	SELECT eps.papersubjectid,
+			  eps.paperid 
+			FROM Tbexampapersubject eps
+			ORDER BY eps.subjectsequence
+		</getSubjectByPaperid>
+		
+		<getZhQuestionFlashByQuestionid>
+		select tbf.* from tbexamquestion tbq, tbexamquestionflash tbf where tbq.tqcid=tbf.questionid and 
+		tbq.questionid=<param>questionid</param> order by tbf.realname
+		</getZhQuestionFlashByQuestionid>
+	</exampapermanage>
+
+</sql>

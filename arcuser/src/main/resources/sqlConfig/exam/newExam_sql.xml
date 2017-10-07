@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sql>
+	<exam>
+	<!-- start add by zhaoyuyang 2016.04.08 -->
+		<queryAdminExamList>
+			select te.*, (select count(*) from tbexampaperanswer where te.examid=examid) examedstu 
+			from tbexamexam te where 1 = 1 <conf>where</conf> order by te.begintime desc
+		</queryAdminExamList>
+		<deleteExamandpaperByExamid>
+			delete from tbexamandpaper where examid = <param>examid</param>
+		</deleteExamandpaperByExamid>
+		<deleteExampaperByExamid>
+			delete from tbexampaper where paperid in (select teap.paperid from tbexamandpaper teap where teap.examid = <param>examid</param>)
+		</deleteExampaperByExamid>   
+		<deleteExamroomByExamid>
+			delete from tbexamroom where examid = <param>examid</param>
+		</deleteExamroomByExamid>
+		<deleteExamstudentByExamid>
+			delete from tbexamstudent where examid = <param>examid</param>
+		</deleteExamstudentByExamid>
+		<deleteExampaperanswerByExamid>
+			delete from Tbexampaperanswer where examid = <param>examid</param>
+		</deleteExampaperanswerByExamid>
+		<updateExamStatusByID>
+			update tbexamexam set ifnow = 0 where examid != <param>examid</param>
+		</updateExamStatusByID>
+		
+	
+		<deleteTbexampapersubjectByExamid>
+			delete from Tbexampapersubject where paperid in (select paperid from Tbexamandpaper teap where teap.examid=<param>examid</param>)
+		</deleteTbexampapersubjectByExamid>
+		
+		<deleteTbexamquestionByExamid>
+			delete from Tbexamquestion where questionid in (select questionid from Tbexamandpaper teap,Tbexampaperquestion tepq where teap.paperid=tepq.paperid and teap.examid=<param>examid</param>)
+		</deleteTbexamquestionByExamid>
+		
+		<deleteTbexampaperquestionByExamid>
+			delete from Tbexampaperquestion where paperid in (select paperid from Tbexamandpaper teap where teap.examid=<param>examid</param>)
+		</deleteTbexampaperquestionByExamid>
+		
+		<deleteTbexamoptionandanswerByExamid>
+			delete from Tbexamoptionandanswer where questionid in (select questionid from Tbexamandpaper teap,Tbexampaperquestion tepq where teap.paperid=tepq.paperid and teap.examid=<param>examid</param>) 
+		</deleteTbexamoptionandanswerByExamid>
+		
+		<deleteTbexamquestionflashByExamid>
+			delete from Tbexamquestionflash where questionid in (select questionid from Tbexamandpaper teap,Tbexampaperquestion tepq where teap.paperid=tepq.paperid and teap.examid=<param>examid</param>) 
+		</deleteTbexamquestionflashByExamid>
+		
+		<!-- 更新学员答案和分数 -->
+		<updateTbexampaperanswerBy4ID>
+			update tbexampaperanswer set optionid = <param>newoptionid</param>,score=<param>score</param>,createtime=<param>createtime</param> 
+			where userid = <param>userid</param> and examid = <param>examid</param> and 
+			questionid = <param>questionid</param> and optionid=<param>optionid</param>
+		</updateTbexampaperanswerBy4ID>
+		<!-- 删除学员答案和分数 -->
+		<deleteTbexampaperanswerBy4ID>
+			delete from tbexampaperanswer where userid = <param>userid</param> and examid = <param>examid</param> and 
+			questionid = <param>questionid</param> and optionid=<param>optionid</param>
+		</deleteTbexampaperanswerBy4ID>
+		<!-- 删除学员答案和分数 -->
+		<deleteTbexampaperanswerBy3ID>
+			delete from tbexampaperanswer where userid = <param>userid</param> and examid = <param>examid</param> and 
+			questionid = <param>questionid</param>
+		</deleteTbexampaperanswerBy3ID>
+		
+		<!-- end add by zhaoyuyang 2016.04.08 -->
+		<clearExamStudentByExamid>
+		delete from tbexamstudent tes where tes.examid = <param>examid</param> 
+		</clearExamStudentByExamid> 
+		
+		<queryCurExamInfo>
+		select te.*,tap.paperid,tp.questioncount from tbexamexam te,tbexampaper tp,tbexamandpaper tap 
+		where te.examid = tap.examid and tap.paperid = tp.paperid and te.ifnow =<param>ifnow</param>
+		</queryCurExamInfo> 
+		
+		<queryExamInfoByExamid>
+		select a.*, tbp.questioncount from (select te.*, tp.paperid from tbexamexam te left join tbexamandpaper tp on te.examid=tp.examid where te.examid = <param>examid</param>) as a, tbexampaper tbp 
+		where a.paperid=tbp.paperid
+		</queryExamInfoByExamid> 
+		
+		<queryExamStudentList>
+		select a.*, tbr.roomno from (select tes.*, tbu.username, tbu.ticketnum from tbexamstudent tes left join tbuser tbu on tes.userid=tbu.userid) as a 
+		left join tbexamroom tbr on a.roomid = tbr.roomid  where a.examid = <param>examid</param> <conf>where</conf>
+		</queryExamStudentList> 
+		
+		<queryExamRoom>
+		select * from tbexamroom where examid = <param>examid</param> and roomno = <param>roomno</param>
+		</queryExamRoom>
+		
+		<queryExamRoomByExamid>
+		select * from tbexamroom where examid = <param>examid</param>
+		</queryExamRoomByExamid>
+
+		<updateExamroomStudentnumByExamid>
+			update tbexamroom tbr set
+			STUDENTNUM=(select count(*) from tbexamstudent tbs where tbs.roomid=tbr.roomid and
+			 tbs.examid=<param>examid</param>)
+			where tbr.examid=<param>examid</param>
+		</updateExamroomStudentnumByExamid>
+	
+		<updateExamStunumAndRoomcountByExamid>
+			update tbexamexam set
+			STUDENTCOUNT=(select sum(tbr.STUDENTNUM) from tbexamroom tbr where tbr.EXAMID=<param>examid</param>),
+			 ROOMCOUNT=(select count(*) from tbexamroom tbr where tbr.EXAMID=<param>examid</param>) where EXAMID=<param>examid</param>
+		</updateExamStunumAndRoomcountByExamid>
+		
+		<queryExamStudentByExamid>
+		select tbs.examstuid, tbr.userid, tbr.photo from tbexamstudent tbs left join tbuser tbr on tbs.userid = tbr.userid where examid = <param>examid</param>
+		</queryExamStudentByExamid> 
+		
+		<queryMonitorInfoList>
+		select tbr.*, tbm.name, tbm.password from tbexamroom tbr left join tbmonitor tbm on tbr.examid=tbm.examid and tbr.roomid=tbm.roomid where tbr.examid=<param>examid</param> <conf>where</conf> 
+		order by tbr.roomno+0 asc
+		</queryMonitorInfoList>
+		
+		<queryExamMonitorList>
+		select tbr.*, tbm.name, tbm.password from tbexamroom tbr left join tbmonitor tbm on tbr.examid=tbm.examid and tbr.roomid=tbm.roomid where tbr.examid=<param>examid</param>
+		</queryExamMonitorList>
+		
+		<queryMonitorInfoByExamidAndRoomid>
+		select * from tbmonitor where examid = <param>examid</param> and roomid = <param>roomid</param>
+		</queryMonitorInfoByExamidAndRoomid>
+		
+		<deleteExamIpInfoByExamId>
+		delete from tbexamip where examid=<param>examid</param>
+		</deleteExamIpInfoByExamId>
+		
+		<deleteExamreserveipInfoByExamId>
+		delete from tbexamreserveip where examid=<param>examid</param>
+		</deleteExamreserveipInfoByExamId>
+		
+		<updateExamipUsedStatusByExamid>
+		update tbexamip tbi set tbi.used=
+		(IF((select count(*) from tbexamstudent tbs where tbi.examid=tbs.examid and tbi.roomid=tbs.roomid and tbi.seatno=tbs.seatno),
+		1, 0)) where tbi.examid=<param>examid</param>
+		</updateExamipUsedStatusByExamid>
+		
+		<updateExamreserveipUsedStatusByExamid>
+		update tbexamreserveip tbi set tbi.used=
+		(IF((select count(*) from tbexamstudent tbs where tbi.examid=tbs.examid and tbi.roomid=tbs.roomid and tbi.seatno=tbs.seatno),
+		1, 0)) where tbi.examid=<param>examid</param>
+		</updateExamreserveipUsedStatusByExamid>
+		
+		<queryExamipList>
+		select tbi.*, tbr.roomno from tbexamip tbi, tbexamroom tbr where tbi.roomid= tbr.roomid and tbi.examid=<param>examid</param> <conf>where</conf> order by seatno asc
+		</queryExamipList>
+		
+		<queryExamreserveipList>
+		select tbi.*, tbr.roomno from tbexamreserveip tbi, tbexamroom tbr where tbi.roomid= tbr.roomid and tbi.examid=<param>examid</param> <conf>where</conf> order by seatno asc
+		</queryExamreserveipList>
+		
+		<queryMonitorForExportByExamid>
+		select tbm.name, tbm.password, tbr.roomno, tbr.studentnum from tbmonitor tbm, tbexamroom tbr where 
+		tbm.roomid = tbr.roomid and tbm.examid=tbr.examid and tbm.examid=<param>examid</param>
+		</queryMonitorForExportByExamid>
+		
+		<queryStudentInfoForPrintByExamidAndRoomid>
+		select tbs.seatno, tbs.kscc, tbu.username, IF(tbu.sex=1,'男','女') sex, tbu.ticketnum, tbu.password, tbu.photo, tbu.idnumber, tbr.roomno from 
+		tbexamstudent tbs, tbuser tbu, tbexamroom tbr where tbs.userid=tbu.userid and tbs.roomid=tbr.roomid and tbs.examid=<param>examid</param> and tbs.roomid=<param>roomid</param>
+		</queryStudentInfoForPrintByExamidAndRoomid>
+		
+		<deleteExamroomByExamid>
+		delete from tbexamroom where examid=<param>examid</param>
+		</deleteExamroomByExamid>
+		
+		<deleteExammonitorByExamid>
+		delete from tbmonitor where examid=<param>examid</param>
+		</deleteExammonitorByExamid>
+		
+		<deleteExamipByExamid>
+		delete from tbexamip where examid=<param>examid</param>
+		</deleteExamipByExamid>
+		
+		<updateExamipUsedByExamstuids>
+		update tbexamip tbi set tbi.used=0 where tbi.seatno=(select seatno from tbexamstudent where examstuid=<param>examstuid</param>) and 
+		tbi.roomid=(select roomid from tbexamstudent where examstuid=<param>examstuid</param>) and 
+		tbi.examid=(select examid from tbexamstudent where examstuid=<param>examstuid</param>)
+		</updateExamipUsedByExamstuids>
+		
+		<queryPaperidByExamid>
+		select paperid from tbexamandpaper where examid=<param>examid</param>
+		</queryPaperidByExamid>
+		
+		<queryExamstuAnswerByExamstuid>
+		select * from tbexampaperanswer where examstuid=<param>examstuid</param>
+		</queryExamstuAnswerByExamstuid>
+		
+		<queryExamstulistByExamidAndRoomid>
+		select tbs.*, tbu.ticketnum from tbexamstudent tbs,tbuser tbu where tbs.userid=tbu.userid and examid=<param>examid</param> and roomid=<param>roomid</param>
+		</queryExamstulistByExamidAndRoomid>
+		
+		<queryExamstuSubmitStatusByRoomid>
+		select tbs.*, tbu.ticketnum, tbu.username, tbu.sex, tbu.idnumber, (select count(distinct tba.questionid) from tbexampaperanswer tba where tba.userid=tbs.userid and tba.examid=tbs.examid) as yidanum 
+		from tbexamstudent tbs, tbuser tbu where 
+		tbu.userid=tbs.userid and 
+ 		tbs.roomid=<param>roomid</param> <conf>where</conf> 
+ 		</queryExamstuSubmitStatusByRoomid>
+ 		
+ 		<deleteStuQuestionAnsByQuestionid>
+		delete from tbexampaperanswer where userid=<param>userid</param> and questionid = <param>questionid</param>
+		</deleteStuQuestionAnsByQuestionid>
+		
+		<queryExamedstuNumByExaid>
+		select count(*) from tbexampaperanswer where examid=<param>examid</param>
+		</queryExamedstuNumByExaid>
+		
+		<queryExamreserveipListByExamidAndRoomid>
+		select tbi.* from tbexamreserveip tbi where tbi.roomid=<param>roomid</param> and tbi.examid=<param>examid</param> and tbi.used=0 order by seatno asc
+		</queryExamreserveipListByExamidAndRoomid>
+		
+		<clearExamuserIpByExamId>
+		update tbexamstudent set ip=NULL where examid=<param>examid</param>
+		</clearExamuserIpByExamId>
+		
+		<updateExamuserIpByExamid>
+		update tbexamstudent tbe set tbe.ip=(select tbi.ip from tbexamreserveip tbi where tbi.SEATNO=tbe.SEATNO and tbi.EXAMID=tbe.EXAMID and tbi.ROOMID=tbe.ROOMID) where tbe.examid=<param>examid</param>
+		</updateExamuserIpByExamid>
+		
+		<queryExamstudentSeatnoByExamidAndRoomid>
+		select SEATNO from tbexamstudent where EXAMID=<param>examid</param> and ROOMID=<param>roomid</param>
+		</queryExamstudentSeatnoByExamidAndRoomid>
+		
+		<getQuestionflashrealname>
+		      SELECT eq.realname 
+      		FROM 
+        		tbexamquestionflash eq 
+        	where
+     			eq.questionid = <param>questionid</param>
+      </getQuestionflashrealname> 
+      
+      <queryUseridByExamid>
+		select USERID, EXAMSTUID from tbexamstudent where EXAMID=<param>examid</param>
+		</queryUseridByExamid>
+		
+	</exam>
+</sql>

@@ -1,0 +1,43 @@
+@charset "utf-8";
+/* CSS reset */
+.nav_wrap{float:left; width:726px;}
+.nav_l,.nav_c,.nav_r{float:left; width:242px; height:274px }
+.nav{float:left; width:242px;}
+.nav a{float:left; width:242px; height:137px; background:url(../images/nav_01.jpg) no-repeat; color:#fff; line-height:20px}
+.nav a h3{padding:20px 0 0 20px; font-size:24px}
+.nav a span{display:block; padding-left:20px; margin-top:2px; font-size:12px}
+.nav_02 a{background:url(../images/nav_02.jpg) no-repeat}
+.nav_03 a{height:87px; background:url(../images/nav_03.jpg) no-repeat}
+.nav_04 a{height:187px; background:url(../images/nav_04.jpg) no-repeat}
+.nav_05 a{height:177px; background:url(../images/nav_05.jpg) no-repeat}
+.nav_06 a{height:97px; background:url(../images/nav_06.jpg) no-repeat}
+
+
+.logo_wrap{float:right; width:400px; height:276px; margin-top:-1px; background:url(../images/login_bg.png) no-repeat; color:#fff; position:relative;}
+.logo_wrap h2{height:48px; border-bottom:1px solid #2291BD; text-align:center; line-height:48px; font-size:16px;}
+.login{width:400px; border-top:1px solid #94D3E6;}
+.form_item{width:360px; height:24px; margin:0 auto; padding:11px 0; border-bottom:1px solid #94D3E6; position:relative;}
+.form_item .placeholder{display:block; height:24px; position:absolute; left:30px; top:10px; line-height:24px;}
+.form_item label{float:left; width:20px; height:24px; margin-left:20px; background:url(../images/icon_01.png) no-repeat; display:inline;}
+#login_pwd label{background:url(../images/icon_02.png) no-repeat;}
+.form_item input{width:310px; height:24px; margin-left:10px; background:none; border:none; line-height:24px; display:inline; color:#fff; z-index:2}
+.form_item input:focus{outline:none;}
+.login_tips{width:360px; min-height:22px; margin:15px auto 0;}
+.login_tips p{margin-left:20px; padding-left:30px; background:url(../images/icon_03.png) no-repeat 0 center; color:#fff45c;}
+.login_btns input{display:block; width:300px; height:46px; margin:15px auto 0; background:#fff; border-radius:4px; border:none; color:#2A998B; font-size:16px; text-align:center; line-height:46px; font-weight:bold; letter-spacing:10px; cursor:pointer;}
+.login_btns input:hover{background:#88ef5a; color:#fff;}
+
+.list1{float:left; width:726px; margin:35px 0 0 ; color:#FFFFFF;}
+.list1 a{color:#FFFFFF}
+.list1 a:hover{color:#B7FF97;}
+.title1{width:726px; height:80px; background-color:rgba(255,255,255,0.15);}
+.title1 a{color:#010101;}
+.title1 h3{float:left; height:30px; margin:25px 0 0 30px; padding-left:100px; background:url(../images/title_01.png) no-repeat; line-height:30px; display:inline; font-size:24px}
+.title1 a{float:right; width:130px; height:38px; border:1px solid #fff; margin:20px 50px 0 0; display:inline; color:#fff; font-weight:bold; font-size:14px; line-height:38px; text-align:center;}
+.title1 a:hover{background:#88ef5a; border:1px solid #88ef5a; color:#fff;}
+.list1 ul{width:726px; padding:15px 0; background-color:rgba(0,167,255,0.8);}
+.list1 ul li{width:704px; height:25px; padding-left:15px; line-height:25px;}
+.list1 ul li a{display:block; width:704px; height:25px; cursor:pointer}
+.list1 ul li span{float:left; width:580px; white-space:nowrap; text-overflow :ellipsis; overflow:hidden;}
+.list1 ul li em{float:right; width:110px; padding-left:4px; font-style:normal; text-align:right;}
+
