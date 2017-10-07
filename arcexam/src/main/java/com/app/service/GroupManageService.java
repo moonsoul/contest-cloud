@@ -31,7 +31,7 @@ public class GroupManageService extends BaseService {
 	public RetResult removeGroup(Map map) {
 		RetResult ret = null;
 		try {
-			ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/group/deleteGroup", map, RetResult.class);
+			ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/group/deleteGroup", map, RetResult.class);
 		} catch (RestClientException e) {
 			logger.info(e.getMessage());
 			ret = new RetResult(ContainsKeys.RET_ERR);
@@ -46,7 +46,7 @@ public class GroupManageService extends BaseService {
 	public RetResult getGroupInfoByID(Map map) {
 		RetResult ret = null;
 		try {
-			ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/group/getGroupInfoByID", map, RetResult.class);
+			ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/group/getGroupInfoByID", map, RetResult.class);
 		} catch (RestClientException e) {
 			logger.info(e.getMessage());
 			ret = new RetResult(ContainsKeys.RET_ERR);
@@ -61,7 +61,7 @@ public class GroupManageService extends BaseService {
 	public RetResult getGroupInfoByIdForDisplay(Map map) {
 		RetResult ret = null;
 		try {
-			ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/group/getGroupInfoByIdForDisplay", map, RetResult.class);
+			ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/group/getGroupInfoByIdForDisplay", map, RetResult.class);
 		} catch (RestClientException e) {
 			logger.info(e.getMessage());
 			ret = new RetResult(ContainsKeys.RET_ERR);
@@ -86,7 +86,7 @@ public class GroupManageService extends BaseService {
 
 		RetResult ret = null;
 		try {
-			ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/group/importGroup", map, RetResult.class);
+			ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/group/importGroup", map, RetResult.class);
 		} catch (RestClientException e) {
 			logger.info(e.getMessage());
 			ret = new RetResult(ContainsKeys.RET_ERR);
@@ -102,7 +102,7 @@ public class GroupManageService extends BaseService {
 	public RetResult updateGroupLocation(Map dto) {
 		RetResult ret = null;
 		try {
-			ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/group/updateGroupLocation", dto, RetResult.class);
+			ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/group/updateGroupLocation", dto, RetResult.class);
 		} catch (RestClientException e) {
 			logger.info(e.getMessage());
 			ret = new RetResult(ContainsKeys.RET_ERR);
@@ -114,7 +114,7 @@ public class GroupManageService extends BaseService {
 	public RetResult queryAllCategory2TreeBeanList() {
 		RetResult ret = null;
 		try {
-			ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/group/queryAllCategory2TreeBeanList", new HashMap(), RetResult.class);
+			ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/group/queryAllCategory2TreeBeanList", new HashMap(), RetResult.class);
 		} catch (RestClientException e) {
 			logger.info(e.getMessage());
 			ret = new RetResult(ContainsKeys.RET_ERR);
@@ -126,7 +126,7 @@ public class GroupManageService extends BaseService {
 	public RetResult getShowAddData(Map map){
 		RetResult ret = null;
 		try {
-			ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/group/getShowAddData", map, RetResult.class);
+			ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/group/getShowAddData", map, RetResult.class);
 		} catch (RestClientException e) {
 			logger.info(e.getMessage());
 			ret = new RetResult(ContainsKeys.RET_ERR);
@@ -138,7 +138,7 @@ public class GroupManageService extends BaseService {
 	public RetResult addGroup(Map map){
 		RetResult ret = null;
 		try {
-			ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/group/addGroup", map, RetResult.class);
+			ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/group/addGroup", map, RetResult.class);
 		} catch (RestClientException e) {
 			logger.info(e.getMessage());
 			ret = new RetResult(ContainsKeys.RET_ERR);
@@ -150,7 +150,7 @@ public class GroupManageService extends BaseService {
 	public RetResult getShowUpdateData(Map map){
 		RetResult ret = null;
 		try {
-			ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/group/getShowUpdateData", map, RetResult.class);
+			ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/group/getShowUpdateData", map, RetResult.class);
 		} catch (RestClientException e) {
 			logger.info(e.getMessage());
 			ret = new RetResult(ContainsKeys.RET_ERR);
@@ -162,7 +162,7 @@ public class GroupManageService extends BaseService {
 	public RetResult updateGroup(Map map){
 		RetResult ret = null;
 		try {
-			ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/group/updateGroup", map, RetResult.class);
+			ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/group/updateGroup", map, RetResult.class);
 		} catch (RestClientException e) {
 			logger.info(e.getMessage());
 			ret = new RetResult(ContainsKeys.RET_ERR);
@@ -174,7 +174,7 @@ public class GroupManageService extends BaseService {
 	public RetResult loadGroupTree(Map map){
 		RetResult ret = null;
 		try {
-			ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/group/loadGroupTree", map, RetResult.class);
+			ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/group/loadGroupTree", map, RetResult.class);
 		} catch (RestClientException e) {
 			logger.info(e.getMessage());
 			ret = new RetResult(ContainsKeys.RET_ERR);
@@ -186,7 +186,7 @@ public class GroupManageService extends BaseService {
 	public RetResult queryZTreeList() {
 		RetResult ret = null;
 		try {
-			ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/group/queryZTreeList", new HashMap(), RetResult.class);
+			ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/group/queryZTreeList", new HashMap(), RetResult.class);
 		} catch (RestClientException e) {
 			logger.info(e.getMessage());
 			ret = new RetResult(ContainsKeys.RET_ERR);
@@ -198,7 +198,7 @@ public class GroupManageService extends BaseService {
 	public RetResult queryZTreeList2LastNodeIsHidden() {
 		RetResult ret = null;
 		try {
-			ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/group/queryZTreeList2LastNodeIsHidden", new HashMap(), RetResult.class);
+			ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/group/queryZTreeList2LastNodeIsHidden", new HashMap(), RetResult.class);
 		} catch (RestClientException e) {
 			logger.info(e.getMessage());
 			ret = new RetResult(ContainsKeys.RET_ERR);

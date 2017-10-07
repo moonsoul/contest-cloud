@@ -30,8 +30,6 @@ public class UserDTO extends Tbuser {
 	private Long opennum;
 	private Long practicetime;
 	private String questionsort;
-	private String creatorid;
-	private String createtime;
 	private Long kscc;
 
 	private String roomno;
@@ -48,9 +46,7 @@ public class UserDTO extends Tbuser {
 	private String searchstatus = ""; // 查询条件：有效状态
 	private String searchusertype = "";
 
-	private Long deletestatus;
 
-	private Long integration;
 	private Long rank;
 	private String orderField;
 	private String orderDirection;
@@ -102,14 +98,6 @@ public class UserDTO extends Tbuser {
 		this.groupname = groupname;
 	}
 
-	public Long getIntegration() {
-		return integration;
-	}
-
-	public void setIntegration(Long integration) {
-		this.integration = integration;
-	}
-
 	public Long getRank() {
 		return rank;
 	}
@@ -132,15 +120,6 @@ public class UserDTO extends Tbuser {
 
 	public void setOrderDirection(String orderDirection) {
 		this.orderDirection = orderDirection;
-	}
-
-
-	public Long getDeletestatus() {
-		return deletestatus;
-	}
-
-	public void setDeletestatus(Long deletestatus) {
-		this.deletestatus = deletestatus;
 	}
 
 	public String getSearchusercode() {
@@ -333,22 +312,6 @@ public class UserDTO extends Tbuser {
 
 	public void setQuestionsort(String questionsort) {
 		this.questionsort = questionsort;
-	}
-
-	public String getCreatorid() {
-		return creatorid;
-	}
-
-	public void setCreatorid(String creatorid) {
-		this.creatorid = creatorid;
-	}
-
-	public String getCreatetime() {
-		return createtime;
-	}
-
-	public void setCreatetime(String createtime) {
-		this.createtime = createtime;
 	}
 
 	public Long getKscc() {

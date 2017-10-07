@@ -25,7 +25,7 @@ public class UserManageService extends BaseService {
     public RetResult doStuLogin(Map map) {
         RetResult ret = null;
         try {
-            ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/user/stuLogin", map, RetResult.class);
+            ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/user/stuLogin", map, RetResult.class);
         } catch (RestClientException e) {
             logger.info(e.getMessage());
             ret = new RetResult(ContainsKeys.RET_ERR);
@@ -37,7 +37,7 @@ public class UserManageService extends BaseService {
     public RetResult doAdminLogin(Map map) {
         RetResult ret = null;
         try {
-            ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/user/adminLogin", map, RetResult.class);
+            ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/user/adminLogin", map, RetResult.class);
         } catch (RestClientException e) {
             logger.info(e.getMessage());
             ret = new RetResult(ContainsKeys.RET_ERR);
@@ -49,7 +49,7 @@ public class UserManageService extends BaseService {
     public RetResult getUserByUsercode(Map map) {
         RetResult ret = null;
         try {
-            ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/user/userByUsercode", map, RetResult.class);
+            ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/user/userByUsercode", map, RetResult.class);
         } catch (RestClientException e) {
             logger.info(e.getMessage());
             ret = new RetResult(ContainsKeys.RET_ERR);
@@ -61,7 +61,7 @@ public class UserManageService extends BaseService {
     public RetResult updatePassword(Map map) {
         RetResult ret = null;
         try {
-            ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/user/updatePassword", map, RetResult.class);
+            ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/user/updatePassword", map, RetResult.class);
         } catch (RestClientException e) {
             logger.info(e.getMessage());
             ret = new RetResult(ContainsKeys.RET_ERR);
@@ -74,7 +74,7 @@ public class UserManageService extends BaseService {
         Map map = new BeanMap(user);
         RetResult ret = null;
         try {
-            ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/user/queryUserList", map, RetResult.class);
+            ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/user/queryUserList", map, RetResult.class);
         } catch (RestClientException e) {
             logger.info(e.getMessage());
             ret = new RetResult(ContainsKeys.RET_ERR);
@@ -87,7 +87,7 @@ public class UserManageService extends BaseService {
         Map map = new BeanMap(user);
         RetResult ret = null;
         try {
-            ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/user/queryUserListDwz", map, RetResult.class);
+            ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/user/queryUserListDwz", map, RetResult.class);
         } catch (RestClientException e) {
             logger.info(e.getMessage());
             ret = new RetResult(ContainsKeys.RET_ERR);
@@ -111,7 +111,7 @@ public class UserManageService extends BaseService {
         // 判断用户编号唯一性
         RetResult ret = null;
         try {
-            ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/user/saveUser", map, RetResult.class);
+            ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/user/saveUser", map, RetResult.class);
         } catch (RestClientException e) {
             logger.info(e.getMessage());
             ret = new RetResult(ContainsKeys.RET_ERR);
@@ -128,7 +128,7 @@ public class UserManageService extends BaseService {
         Map map = new BeanMap(userdto);
         RetResult ret = null;
         try {
-            ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/user/updatePassword", map, RetResult.class);
+            ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/user/updatePassword", map, RetResult.class);
         } catch (RestClientException e) {
             logger.info(e.getMessage());
             ret = new RetResult(ContainsKeys.RET_ERR);
@@ -145,7 +145,7 @@ public class UserManageService extends BaseService {
         Map map = new BeanMap(userdto);
         RetResult ret = null;
         try {
-            ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/user/updateUser", map, RetResult.class);
+            ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/user/updateUser", map, RetResult.class);
         } catch (RestClientException e) {
             logger.info(e.getMessage());
             ret = new RetResult(ContainsKeys.RET_ERR);
@@ -161,7 +161,7 @@ public class UserManageService extends BaseService {
         Map map = new BeanMap(tbuser);
         RetResult ret = null;
         try {
-            ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/user/deleteUser", map, RetResult.class);
+            ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/user/deleteUser", map, RetResult.class);
         } catch (RestClientException e) {
             logger.info(e.getMessage());
             ret = new RetResult(ContainsKeys.RET_ERR);
@@ -178,7 +178,7 @@ public class UserManageService extends BaseService {
         map.put("ids", ids);
         RetResult ret = null;
         try {
-            ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/user/removeAllBatchUser", map, RetResult.class);
+            ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/user/removeAllBatchUser", map, RetResult.class);
         } catch (RestClientException e) {
             logger.info(e.getMessage());
             ret = new RetResult(ContainsKeys.RET_ERR);
@@ -197,7 +197,7 @@ public class UserManageService extends BaseService {
         Map map = new BeanMap(tbuser);
         RetResult ret = null;
         try {
-            ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/user/changeUserStatus", map, RetResult.class);
+            ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/user/changeUserStatus", map, RetResult.class);
         } catch (RestClientException e) {
             logger.info(e.getMessage());
             ret = new RetResult(ContainsKeys.RET_ERR);
@@ -214,7 +214,7 @@ public class UserManageService extends BaseService {
         Map map = new BeanMap(userdto);
         RetResult ret = null;
         try {
-            ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/user/getUserInfoById", map, RetResult.class);
+            ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/user/getUserInfoById", map, RetResult.class);
         } catch (RestClientException e) {
             logger.info(e.getMessage());
             ret = new RetResult(ContainsKeys.RET_ERR);
@@ -234,7 +234,7 @@ public class UserManageService extends BaseService {
         Map map = new BeanMap(tbuser);
         RetResult ret = null;
         try {
-            ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/user/getUserInfoByIdForDisplay", map, RetResult.class);
+            ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/user/getUserInfoByIdForDisplay", map, RetResult.class);
         } catch (RestClientException e) {
             logger.info(e.getMessage());
             ret = new RetResult(ContainsKeys.RET_ERR);
@@ -260,7 +260,7 @@ public class UserManageService extends BaseService {
 
         RetResult ret = null;
         try {
-            ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/user/importUser", map, RetResult.class);
+            ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/user/importUser", map, RetResult.class);
         } catch (RestClientException e) {
             logger.info(e.getMessage());
             ret = new RetResult(ContainsKeys.RET_ERR);
@@ -296,7 +296,7 @@ public class UserManageService extends BaseService {
         Map map = new BeanMap(userdto);
         RetResult ret = null;
         try {
-            ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/user/getUserPaiMingByID", map, RetResult.class);
+            ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/user/getUserPaiMingByID", map, RetResult.class);
         } catch (RestClientException e) {
             logger.info(e.getMessage());
             ret = new RetResult(ContainsKeys.RET_ERR);
@@ -310,7 +310,7 @@ public class UserManageService extends BaseService {
         Map map = new BeanMap(user);
         RetResult ret = null;
         try {
-            ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/user/updateUserJiFen", map, RetResult.class);
+            ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/user/updateUserJiFen", map, RetResult.class);
         } catch (RestClientException e) {
             logger.info(e.getMessage());
             ret = new RetResult(ContainsKeys.RET_ERR);
@@ -323,7 +323,7 @@ public class UserManageService extends BaseService {
         Map map = new BeanMap(user);
         RetResult ret = null;
         try {
-            ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/user/getUserListPaiMing", map, RetResult.class);
+            ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/user/getUserListPaiMing", map, RetResult.class);
         } catch (RestClientException e) {
             logger.info(e.getMessage());
             ret = new RetResult(ContainsKeys.RET_ERR);
@@ -336,7 +336,7 @@ public class UserManageService extends BaseService {
         Map map = new BeanMap(user);
         RetResult ret = null;
         try {
-            ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/user/getUserListPaiMingByBanJi", map, RetResult.class);
+            ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/user/getUserListPaiMingByBanJi", map, RetResult.class);
         } catch (RestClientException e) {
             logger.info(e.getMessage());
             ret = new RetResult(ContainsKeys.RET_ERR);
@@ -349,7 +349,7 @@ public class UserManageService extends BaseService {
         Map map = new BeanMap(user);
         RetResult ret = null;
         try {
-            ret = invokeRemotePost("http://127.0.0.1:8199/arcuser/user/getUserListPaiMingByNianJi", map, RetResult.class);
+            ret = invokeRemotePost("http://SERVICE-ARCUSER/arcuser/user/getUserListPaiMingByNianJi", map, RetResult.class);
         } catch (RestClientException e) {
             logger.info(e.getMessage());
             ret = new RetResult(ContainsKeys.RET_ERR);

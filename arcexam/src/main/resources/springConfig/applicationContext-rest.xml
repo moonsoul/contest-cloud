@@ -50,7 +50,7 @@
 
 	<bean id="httpClient" factory-bean="httpClientBuilder" factory-method="build"/>
 
-	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+	<bean id="restTemplate1" class="org.springframework.web.client.RestTemplate">
 		<property name="messageConverters">
 			<list value-type="org.springframework.http.converter.HttpMessageConverter">
 				<bean class="org.springframework.http.converter.StringHttpMessageConverter">
